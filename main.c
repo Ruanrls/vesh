@@ -35,7 +35,7 @@ int main()
             perror("");
         }
 
-        dup2(0, fileDescriptors[1]);
+        // dup2(0, fileDescriptors[1]);
 
         exit(EXIT_SUCCESS);
         break;
@@ -43,7 +43,7 @@ int main()
     default:
 
         //pai
-        dup2(fileDescriptors[1], 0);
+        // dup2(fileDescriptors[1], 0);
         break;
     }
 
