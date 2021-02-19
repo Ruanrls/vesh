@@ -17,8 +17,6 @@ commandline *CreateStack()
         cmd->args[i].size = 0;
     }
 
-    printf("Passou do if");
-
     return cmd;
 }
 
