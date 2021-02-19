@@ -1,23 +1,39 @@
 #ifndef COMMANDS_H
 #define COMMANDS_H
 
-#define CMD_MAX_BUFF_SIZE 255
+//constantes de controle
+#define CMD_MAX_SIZE 255
+#define ARG_MAX_SIZE 50
+#define ARG_MAX_QUANTITY 10
 
 //minha própria lista de errnos
 #define SUCCESS 0
 #define FULL 1
 #define EMPTY 2
 
-//estrutura de dados que irá conter os caracteres digitados
-typedef struct Command
+typedef struct
 {
-    int n;
-    char *key;
-} command;
+    int size;  //tamanho em caracteres do argumento
+    char *arg; //Argumento
+} arguments;
 
-char *GetCommand();                     //recebe o comando a ser utilizado
-int InsertChar(command *cmd, char key); //Insere um caractere na pilha
-int RemoveChar(command *cmd);           //Remove um caractere da pilha (.pop python)
-command *CreateStack();                 //Cria a pilha e a inicializa vazia
+//estrutura de dados que irá conter os caracteres digitados na commandline separando os argumentos
+typedef struct Commandline
+{
+    int cmdSize;     //Tamanho em caracteres do comando inserido (apenas o comando, sem os args)
+    int argSize;     //Quantidade de argumentos no comando
+    char *command;   //comando principal digitado
+    arguments *args; //argumentos digitados
+} commandline;
+
+//command line
+commandline *CreateStack();                 //Cria a pilha e a inicializa vazia
+commandline *GetCommand();                  //recebe o comando a ser utilizado
+int InsertChar(commandline *cmd, char key); //Insere um caractere na pilha
+int RemoveChar(commandline *cmd);           //Remove um caractere da pilha (.pop python)
+
+//args
+int InsertArg(commandline *cmd, char key, int position); //Insere um caractere na pilha
+int RemoveArg(arguments *args);                          //Remove um caractere da pilha (.pop python)
 
 #endif

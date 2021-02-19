@@ -10,7 +10,7 @@ int main()
 {
 
     int fileDescriptors[2];
-    char *buffer;
+    commandline *command;
     int bytes;
 
     char *cmd[] = {NULL};
@@ -27,10 +27,10 @@ int main()
         break;
 
     case 0:
-        printf("Este é o filho!\n");
+        //filho
 
-        buffer = GetCommand();
-        if (-1 == execvp(buffer, cmd))
+        command = GetCommand();
+        if (-1 == execvp(command->command, cmd))
         {
             perror("");
         }
@@ -41,6 +41,8 @@ int main()
         break;
 
     default:
+
+        //pai
         dup2(fileDescriptors[1], 0);
         break;
     }
