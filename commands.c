@@ -1,6 +1,7 @@
 #include "commands.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 commandline *CreateStack()
 {
@@ -8,7 +9,7 @@ commandline *CreateStack()
 
     cmd->cmdSize = 0;
     cmd->argSize = 0;
-    cmd->command = calloc(1, CMD_MAX_SIZE); //alocamos o espaço total para evitarmos chamada de sistema
+    cmd->command = malloc(sizeof(char) * CMD_MAX_SIZE); //alocamos o espaço total para evitarmos chamada de sistema
 
     cmd->args = malloc(sizeof(arguments) * ARG_MAX_QUANTITY); //alocamos o espaço total para evitarmos chamada de sistema
     for (int i = 0; i < ARG_MAX_QUANTITY; i++)
@@ -20,17 +21,46 @@ commandline *CreateStack()
     return cmd;
 }
 
-commandline *GetCommand()
+void *GetCommand(commandline *cmd)
 {
-    commandline *cmd = CreateStack();
     char key;
 
     while ((key = getchar()) != '\n')
     {
-        InsertChar(cmd, key);
-    }
 
-    return cmd;
+        switch (key)
+        {
+        case ' ':
+            cmd->argSize++;
+            GetArgs(cmd);
+            break;
+
+        default:
+            InsertChar(cmd, key);
+            break;
+        }
+    }
+}
+
+void *GetArgs(commandline *cmd)
+{
+    char key = 'a';
+
+    while (1)
+    {
+        key = getchar();
+
+        if (key == '\n' || cmd->argSize == ARG_MAX_QUANTITY)
+            break;
+
+        if (key == ' ')
+        {
+            cmd->argSize++;
+            continue;
+        }
+
+        InsertArg(cmd, key);
+    }
 }
 
 int InsertChar(commandline *cmd, char key)
@@ -58,14 +88,13 @@ int RemoveChar(commandline *cmd)
     return SUCCESS;
 }
 
-int InsertArg(commandline *cmd, char key, int position) //Insere um caractere na pilha
+int InsertArg(commandline *cmd, char key) //Insere um caractere na pilha
 {
-
-    if (cmd->args[position].size == ARG_MAX_SIZE || cmd->argSize == ARG_MAX_QUANTITY) //buffer cheio
+    if (cmd->args[cmd->argSize - 1].size == ARG_MAX_SIZE) //buffer cheio
         return FULL;
 
-    cmd->args[position].size++;
-    cmd->args[position].arg[cmd->args[position].size - 1] = key;
+    cmd->args[cmd->argSize - 1].size++;
+    cmd->args[cmd->argSize - 1].arg[cmd->args[cmd->argSize - 1].size - 1] = key; //insere o caractere no argumento
     return SUCCESS;
 }
 

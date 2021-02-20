@@ -28,12 +28,13 @@ typedef struct Commandline
 
 //command line
 commandline *CreateStack();                 //Cria a pilha e a inicializa vazia
-commandline *GetCommand();                  //recebe o comando a ser utilizado
+void *GetCommand(commandline *cmd);         //Recebe o comando a ser utilizado
+void *GetArgs(commandline *cmd);            //Recebe os argumentos do comando
 int InsertChar(commandline *cmd, char key); //Insere um caractere na pilha
 int RemoveChar(commandline *cmd);           //Remove um caractere da pilha (.pop python)
 
 //args
-int InsertArg(commandline *cmd, char key, int position); //Insere um caractere na pilha
-int RemoveArg(arguments *args);                          //Remove um caractere da pilha (.pop python)
+int InsertArg(commandline *cmd, char key); //Insere um caractere na pilha
+int RemoveArg(arguments *args);            //Remove um caractere da pilha (.pop python)
 
 #endif
