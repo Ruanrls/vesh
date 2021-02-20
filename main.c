@@ -4,6 +4,7 @@
 #include <unistd.h> //chamadas de sistema
 #include <errno.h>  //para tratar os erros
 #include <sys/wait.h>
+#include <string.h>
 
 #define BUFFSIZE 500
 
@@ -12,17 +13,14 @@ int main()
 
     int fileDescriptors[2];
     commandline *command = CreateStack();
-    int bytes;
-
-    char **args;
 
     GetCommand(command);
-    printf("Comando: %s\n", command->command);
-    args = ParseArgs(command);
+
+    printf("%d\n", command->argSize);
 
     for (int i = 0; i < command->argSize; i++)
     {
-        printf("Argumento[%d]: %s\n", 1 + i, args[i]);
+        printf("-%s-", command->args[i]);
     }
 
     // switch (fork())

@@ -4,38 +4,24 @@
 //constantes de controle
 #define CMD_MAX_SIZE 255
 #define ARG_MAX_SIZE 50
-#define ARG_MAX_QUANTITY 5
+#define ARG_MAX_QUANTITY 10
 
 //minha própria lista de errnos
 #define SUCCESS 0
 #define FULL 1
 #define EMPTY 2
 
-typedef struct
-{
-    int size;  //tamanho em caracteres do argumento
-    char *arg; //Argumento
-} arguments;
-
 //estrutura de dados que irá conter os caracteres digitados na commandline separando os argumentos
 typedef struct Commandline
 {
-    int cmdSize;     //Tamanho em caracteres do comando inserido (apenas o comando, sem os args)
-    int argSize;     //Quantidade de argumentos no comando
-    char *command;   //comando principal digitado
-    arguments *args; //argumentos digitados
+    int cmdSize; //Tamanho em caracteres do comando inserido
+    int argSize; //Quantidade de argumentos no comando (O proprio comando conta como argumento)
+    char **args; //argumentos digitados
 } commandline;
 
 //command line
 commandline *CreateStack();                 //Cria a pilha e a inicializa vazia
-void *GetCommand(commandline *cmd);         //Recebe o comando a ser utilizado
-void *GetArgs(commandline *cmd);            //Recebe os argumentos do comando
-int InsertChar(commandline *cmd, char key); //Insere um caractere na pilha
-int RemoveChar(commandline *cmd);           //Remove um caractere da pilha (.pop python)
-
-//args
-int InsertArg(commandline *cmd, char key); //Insere um caractere na pilha
-int RemoveArg(arguments *args);            //Remove um caractere da pilha (.pop python)
-char **ParseArgs(commandline *cmd);        //Transforma os argumentos em string
+void GetCommand(commandline *cmd);          //Recebe o comando a ser utilizado
+int InsertArg(commandline *cmd, char *key); //Insere um caractere na pilha
 
 #endif

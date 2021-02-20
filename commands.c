@@ -9,123 +9,46 @@ commandline *CreateStack()
 
     cmd->cmdSize = 0;
     cmd->argSize = 0;
-    cmd->command = malloc(sizeof(char) * CMD_MAX_SIZE); //alocamos o espaço total para evitarmos chamada de sistema
 
-    cmd->args = malloc(sizeof(arguments) * ARG_MAX_QUANTITY); //alocamos o espaço total para evitarmos chamada de sistema
+    cmd->args = malloc(sizeof(char **) * ARG_MAX_QUANTITY);
+
     for (int i = 0; i < ARG_MAX_QUANTITY; i++)
     {
-        cmd->args[i].arg = calloc(sizeof(char), ARG_MAX_SIZE); //alocamos o espaço total para evitarmos chamada de sistema
-        cmd->args[i].size = 0;
+        cmd->args[i] = (char *)calloc(sizeof(char), ARG_MAX_SIZE); //alocamos o espaço total para evitarmos chamada de sistema
     }
 
     return cmd;
 }
 
-void *GetCommand(commandline *cmd)
+void GetCommand(commandline *cmd)
 {
+    char string[ARG_MAX_SIZE] = "\0";
     char key;
 
-    while ((key = getchar()) != '\n')
+    int *argSize = &(cmd->argSize), *cmdSize = &(cmd->cmdSize);
+
+    while (cmd->cmdSize < CMD_MAX_SIZE && cmd->argSize < ARG_MAX_QUANTITY)
     {
-        if (key == ' ')
-        {
-            GetArgs(cmd);
-        }
-        InsertChar(cmd, key);
-    }
-}
-
-void *GetArgs(commandline *cmd)
-{
-    char key = 'a';
-
-    int flag = 0; //flag que identifica se houve elemento inserido apos o espaço
-
-    cmd->argSize++;
-    while (1)
-    {
-
         key = getchar();
-        if (key == '\n' || cmd->argSize == ARG_MAX_QUANTITY)
+
+        if (key == '\n')
         {
-            if (cmd->argSize == ARG_MAX_QUANTITY)
-            {
-                printf("nao e possivel inserir mais argumentos\n");
-                exit(0);
-            }
-            if (1 == flag)
-                cmd->argSize--;
+            strcpy(cmd->args[cmd->argSize], string);
+            if (strlen(cmd->args[cmd->argSize]) == 0)
+                break;
+            cmd->argSize++;
             break;
         }
-
-        if (key == ' ')
+        else if (key == ' ')
         {
-            flag = 1;
+            strcpy(cmd->args[cmd->argSize], string);
+            string[0] = '\0';
             cmd->argSize++;
+            cmd->cmdSize++;
             continue;
         }
 
-        flag = 0;
-        InsertArg(cmd, key);
+        sprintf(string, "%s%c", string, key);
+        cmd->cmdSize++;
     }
-}
-
-int InsertChar(commandline *cmd, char key)
-{
-
-    if (cmd->cmdSize == CMD_MAX_SIZE) //buffer cheio
-        return FULL;
-
-    cmd->cmdSize++;                       //Aumenta um caractere na variável de controle
-    cmd->command[cmd->cmdSize - 1] = key; //Caso não seja um novo argumento
-                                          //empilhamos no comando principal
-
-    return SUCCESS;
-}
-
-int RemoveChar(commandline *cmd)
-{
-
-    if (cmd->cmdSize == 0) //nada a ser retirado
-        return EMPTY;
-
-    cmd->command[cmd->cmdSize - 1] = '\0'; //removemos o caractere
-    cmd->cmdSize--;
-
-    return SUCCESS;
-}
-
-int InsertArg(commandline *cmd, char key) //Insere um caractere na pilha
-{
-    if (cmd->args[cmd->argSize - 1].size == ARG_MAX_SIZE) //buffer cheio
-        return FULL;
-
-    cmd->args[cmd->argSize - 1].size++;
-    cmd->args[cmd->argSize - 1].arg[cmd->args[cmd->argSize - 1].size - 1] = key; //insere o caractere no argumento
-    return SUCCESS;
-}
-
-int RemoveArg(arguments *args) //Remove um caractere da pilha (.pop python)
-{
-    if (args->size == 0) //nada a ser retirado
-        return EMPTY;
-
-    args->arg[args->size - 1] = '\0'; //removemos o caractere
-    args->size--;
-}
-
-char **ParseArgs(commandline *cmd)
-{
-    char **args = malloc((sizeof(char) * cmd->argSize) + 1);
-
-    for (int i = 0; i < cmd->argSize; i++)
-    {
-        args[1 + i] = cmd->args[i].arg;
-    }
-
-    cmd->argSize++;
-    args[0] = cmd->command;
-    cmd->argSize++;
-    args[cmd->argSize] = NULL;
-    return args;
 }
