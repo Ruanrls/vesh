@@ -10,7 +10,7 @@ commandline *CreateStack()
     cmd->cmdSize = 0;
     cmd->argSize = 0;
 
-    cmd->args = malloc(sizeof(char **) * ARG_MAX_QUANTITY);
+    cmd->args = malloc(sizeof(char *) * ARG_MAX_QUANTITY);
 
     for (int i = 0; i < ARG_MAX_QUANTITY; i++)
     {
@@ -51,4 +51,6 @@ void GetCommand(commandline *cmd)
         sprintf(string, "%s%c", string, key);
         cmd->cmdSize++;
     }
+
+    cmd->args[cmd->argSize] = NULL;
 }

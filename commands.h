@@ -4,7 +4,8 @@
 //constantes de controle
 #define CMD_MAX_SIZE 255
 #define ARG_MAX_SIZE 50
-#define ARG_MAX_QUANTITY 10
+#define ARG_MAX_QUANTITY 5
+#define STDOUT_MAX_BUFF 1000
 
 //minha própria lista de errnos
 #define SUCCESS 0

@@ -4,51 +4,53 @@
 #include <unistd.h> //chamadas de sistema
 #include <errno.h>  //para tratar os erros
 #include <sys/wait.h>
-#include <string.h>
 
 #define BUFFSIZE 500
 
 int main()
 {
 
-    int fileDescriptors[2];
+    int fileDescriptors[2], bytes;
     commandline *command = CreateStack();
 
-    GetCommand(command);
+    char buffer[STDOUT_MAX_BUFF] = "\0";
 
-    printf("%d\n", command->argSize);
-
-    for (int i = 0; i < command->argSize; i++)
+    pipe(fileDescriptors);
+    switch (fork())
     {
-        printf("-%s-", command->args[i]);
+
+    case -1:
+        printf("Erro ao criar um novo processo!\n");
+        exit(EXIT_FAILURE);
+        break;
+
+    case 0:
+        //filho
+        GetCommand(command);
+
+        close(fileDescriptors[0]);
+        dup2(fileDescriptors[1], 1);
+
+        if (-1 == execvp(command->args[0], command->args))
+        {
+            perror("");
+        }
+
+        return 0;
+
+    default:
+        //pai
+        wait(NULL);
+        close(fileDescriptors[1]);
+
+        bytes = read(fileDescriptors[0], &buffer, STDOUT_MAX_BUFF);
+
+        close(fileDescriptors[0]);
+
+        printf("Vamos testar o buffer: \n\n%s", buffer);
+
+        break;
     }
-
-    // switch (fork())
-    // {
-
-    // case -1:
-    //     printf("Erro ao criar um novo processo!\n");
-    //     exit(EXIT_FAILURE);
-    //     break;
-
-    // case 0:
-    //     //filho
-    //     GetCommand(command);
-
-    //     if (-1 == execvp(command->command, cmd))
-    //     {
-    //         perror("");
-    //     }
-
-    //     exit(EXIT_SUCCESS);
-    //     break;
-
-    // default:
-
-    //     //pai
-    //     wait(NULL);
-    //     break;
-    // }
 
     return 0;
 }
