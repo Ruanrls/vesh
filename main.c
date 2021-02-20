@@ -14,16 +14,15 @@ int main()
     commandline *command = CreateStack();
     int bytes;
 
-    char *cmd[] = {"", NULL};
-
-    printf("Forking...\n");
+    char **args;
 
     GetCommand(command);
     printf("Comando: %s\n", command->command);
+    args = ParseArgs(command);
 
     for (int i = 0; i < command->argSize; i++)
     {
-        printf("Argumento[%d]: %s\n", 1 + i, command->args[i].arg);
+        printf("Argumento[%d]: %s\n", 1 + i, args[i]);
     }
 
     // switch (fork())

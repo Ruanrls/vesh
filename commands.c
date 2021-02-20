@@ -27,18 +27,11 @@ void *GetCommand(commandline *cmd)
 
     while ((key = getchar()) != '\n')
     {
-
-        switch (key)
+        if (key == ' ')
         {
-        case ' ':
-            cmd->argSize++;
             GetArgs(cmd);
-            break;
-
-        default:
-            InsertChar(cmd, key);
-            break;
         }
+        InsertChar(cmd, key);
     }
 }
 
@@ -46,19 +39,33 @@ void *GetArgs(commandline *cmd)
 {
     char key = 'a';
 
+    int flag = 0; //flag que identifica se houve elemento inserido apos o espaço
+
+    cmd->argSize++;
     while (1)
     {
-        key = getchar();
 
+        key = getchar();
         if (key == '\n' || cmd->argSize == ARG_MAX_QUANTITY)
+        {
+            if (cmd->argSize == ARG_MAX_QUANTITY)
+            {
+                printf("nao e possivel inserir mais argumentos\n");
+                exit(0);
+            }
+            if (1 == flag)
+                cmd->argSize--;
             break;
+        }
 
         if (key == ' ')
         {
+            flag = 1;
             cmd->argSize++;
             continue;
         }
 
+        flag = 0;
         InsertArg(cmd, key);
     }
 }
@@ -107,7 +114,18 @@ int RemoveArg(arguments *args) //Remove um caractere da pilha (.pop python)
     args->size--;
 }
 
-char **ParseArgs(arguments *args)
+char **ParseArgs(commandline *cmd)
 {
-    printf("Teste");
+    char **args = malloc((sizeof(char) * cmd->argSize) + 1);
+
+    for (int i = 0; i < cmd->argSize; i++)
+    {
+        args[1 + i] = cmd->args[i].arg;
+    }
+
+    cmd->argSize++;
+    args[0] = cmd->command;
+    cmd->argSize++;
+    args[cmd->argSize] = NULL;
+    return args;
 }

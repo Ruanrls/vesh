@@ -36,5 +36,6 @@ int RemoveChar(commandline *cmd);           //Remove um caractere da pilha (.pop
 //args
 int InsertArg(commandline *cmd, char key); //Insere um caractere na pilha
 int RemoveArg(arguments *args);            //Remove um caractere da pilha (.pop python)
+char **ParseArgs(commandline *cmd);        //Transforma os argumentos em string
 
 #endif
