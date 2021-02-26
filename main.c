@@ -4,14 +4,24 @@
 #include <unistd.h> //chamadas de sistema
 #include <errno.h>  //para tratar os erros
 #include <sys/wait.h>
+#include <string.h>
 
 #define BUFFSIZE 500
 
 int main()
 {
+    char *buff = malloc(sizeof(char) * 100);
 
-    int fileDescriptors[2], bytes;
-    commandline *command = CreateStack();
+    commandline *cmdline = CreateLine();
+    commandline *aux;
+
+    GetCommand(cmdline);
+
+    printf("%s\n", cmdline->current->args[0]);
+    printf("%s\n", cmdline->next->current->args[0]);
+
+    /* int fileDescriptors[2], bytes;
+    command *cmd = CreateStack();
 
     char buffer[STDOUT_MAX_BUFF] = "\0";
 
@@ -26,12 +36,12 @@ int main()
 
     case 0:
         //filho
-        GetCommand(command);
+        GetCommand(cmd);
 
         close(fileDescriptors[0]);
         dup2(fileDescriptors[1], 1);
 
-        if (-1 == execvp(command->args[0], command->args))
+        if (-1 == execvp(cmd->args[0], cmd->args))
         {
             perror("");
         }
@@ -51,6 +61,6 @@ int main()
 
         break;
     }
-
+ */
     return 0;
 }
