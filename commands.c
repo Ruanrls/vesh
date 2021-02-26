@@ -34,6 +34,8 @@ void GetCommand(commandline *root)
     int *argSize = &(cmd->argSize);
     int *cmdSize = &(cmd->cmdSize);
 
+    setbuf(stdin, NULL);
+
     while (cmd->cmdSize < CMD_MAX_SIZE && cmd->argSize < ARG_MAX_QUANTITY)
     {
         key = getchar();
@@ -61,7 +63,7 @@ void GetCommand(commandline *root)
             flagSpace = 1;
             continue;
         }
-        else if (key == '|')
+        else if ('|' == key || '>' == key || '<' == key)
         {
             flagPipe = 1;
 
@@ -78,7 +80,7 @@ void GetCommand(commandline *root)
                 cmd->cmdSize++;
             }
 
-            CreateCommand(root);
+            CreateCommand(root, key);
             cmd = commandNode->next->current;
             argSize = &(cmd->argSize);
             cmdSize = &(cmd->cmdSize);
@@ -93,11 +95,12 @@ void GetCommand(commandline *root)
 
 commandline *CreateLine()
 {
-    commandline *cmd = malloc(sizeof(command));
+    commandline *cmd = malloc(sizeof(command *));
 
     cmd->current = CreateStack();
     cmd->next = NULL;
     cmd->prev = NULL;
+    cmd->nextOperator = '\0';
 
     return cmd;
 }
@@ -110,10 +113,11 @@ commandline *GetLastCommand(commandline *cmd)
     return GetLastCommand(cmd->next);
 }
 
-void CreateCommand(commandline *cmd)
+void CreateCommand(commandline *cmd, char key)
 {
-
     commandline *last = GetLastCommand(cmd);
+    last->nextOperator = key;
+
     commandline *aux = CreateLine();
 
     aux->prev = last;

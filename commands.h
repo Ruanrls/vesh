@@ -24,6 +24,8 @@ typedef struct Commandline
 {
     command *current;
 
+    char nextOperator;
+
     struct Commandline *prev;
     struct Commandline *next;
 } commandline;
@@ -39,6 +41,6 @@ int InsertArg(command *cmd, char *key); //Insere um caractere na pilha
 //commandline
 commandline *CreateLine();
 commandline *GetLastCommand(commandline *cmd);
-void CreateCommand(commandline *cmd);
+void CreateCommand(commandline *cmd, char key);
 
 #endif
