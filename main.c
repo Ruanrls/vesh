@@ -1,4 +1,5 @@
 #include "commands.h"
+#include "commandline.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h> //chamadas de sistema

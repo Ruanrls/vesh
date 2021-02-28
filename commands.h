@@ -20,27 +20,8 @@ typedef struct
     char **args; //argumentos digitados
 } command;
 
-typedef struct Commandline
-{
-    command *current;
-
-    char nextOperator;
-
-    struct Commandline *prev;
-    struct Commandline *next;
-} commandline;
-
-//command->prev = null
-//command->next null
-
 //command
 command *CreateStack();                 //Cria a pilha e a inicializa vazia
-void GetCommand(commandline *root);     //Recebe o comando a ser utilizado
 int InsertArg(command *cmd, char *key); //Insere um caractere na pilha
-
-//commandline
-commandline *CreateLine();
-commandline *GetLastCommand(commandline *cmd);
-void CreateCommand(commandline *cmd, char key);
 
 #endif

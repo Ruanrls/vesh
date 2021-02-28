@@ -1,16 +1,18 @@
 TARGET=main
 LD=gcc
-OBJS=main.o commands.o
+OBJS=main.o commands.o commandline.o
 
 all: $(OBJS)
 	$(LD) $(OBJS) -o $(TARGET)
 
 commands.o: commands.c
-	$(LD) -c commands.c -o commands.o
+	$(LD) -c commands.c
 
 main.o: main.c
-	$(LD) -c main.c -o main.o
+	$(LD) -c main.c
 
+commandline.o: commandline.c
+	$(LD) -c commandline.c
 
 clean:
 	rm -f *.o
