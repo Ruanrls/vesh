@@ -3,7 +3,7 @@ LD=gcc
 OBJS=main.o commands.o commandline.o
 
 all: $(OBJS)
-	$(LD) $(OBJS) -o $(TARGET)
+	$(LD) $(OBJS) -o $(TARGET) && ./$(TARGET)
 
 commands.o: commands.c
 	$(LD) -c commands.c

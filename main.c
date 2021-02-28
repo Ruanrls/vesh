@@ -16,6 +16,8 @@ int main()
     commandline *cmdline = CreateLine();
     commandline *aux;
 
+
+	printf("> ");
     GetCommand(cmdline);
 
     printf("%s\n", cmdline->current->args[0]);
