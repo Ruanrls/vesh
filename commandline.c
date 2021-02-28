@@ -24,7 +24,7 @@ commandline *GetLastCommand(commandline *cmd)
     return GetLastCommand(cmd->next);
 }
 
-void CreateCommand(commandline *cmd, char key)
+commandline *CreateCommandLine(commandline *cmd, char key)
 {
     commandline *last = GetLastCommand(cmd);
     last->nextOperator = key;
@@ -35,12 +35,15 @@ void CreateCommand(commandline *cmd, char key)
     last->next = aux;
 
     aux->current = CreateStack();
-} 
+
+	return aux;
+}
 
 void GetCommand(commandline *root)
 {
     commandline *commandNode = GetLastCommand(root);
     command *cmd = commandNode->current;
+	command *new = NULL;
 
     char string[ARG_MAX_SIZE] = "\0";
     char key;
@@ -48,36 +51,30 @@ void GetCommand(commandline *root)
     int flagSpace = 0;
     int flagPipe = 0;
 
-    int *argSize = &(cmd->argSize);
-    int *cmdSize = &(cmd->cmdSize);
-
     setbuf(stdin, NULL);
 
     while (cmd->cmdSize < CMD_MAX_SIZE && cmd->argSize < ARG_MAX_QUANTITY)
     {
-        key = getchar();
-
+        key = getchar();	
         if (key == '\n')
         {
-            strcpy(cmd->args[cmd->argSize], string);
-            if (strlen(cmd->args[cmd->argSize]) == 0)
-                break;
-            cmd->argSize++;
+            AddComand(cmd, string);
+			if(flagSpace)
+				cmd->argSize--;
             break;
         }
-        else if (key == ' ')
+
+        cmd->cmdSize++;
+        if (key == ' ')
         {
+            flagSpace = 1;
             if (flagPipe)
             {
                 flagPipe = 0;
                 continue;
             }
 
-            strcpy(cmd->args[cmd->argSize], string);
-            string[0] = '\0';
-            cmd->argSize++;
-            cmd->cmdSize++;
-            flagSpace = 1;
+			AddComand(cmd, string);
             continue;
         }
         else if ('|' == key || '>' == key || '<' == key)
@@ -91,21 +88,19 @@ void GetCommand(commandline *root)
             }
             else
             {
-                strcpy(cmd->args[cmd->argSize], string);
-                string[0] = '\0';
-                cmd->argSize++;
-                cmd->cmdSize++;
+                AddComand(cmd, string);
             }
 
-            CreateCommand(root, key);
-            cmd = commandNode->next->current;
-            argSize = &(cmd->argSize);
-            cmdSize = &(cmd->cmdSize);
-            continue;
+            commandNode = CreateCommandLine(root, key);
+            cmd = commandNode->current;
+			continue;
         }
 
     	sprintf(string, "%s%c", string, key);
-        cmd->cmdSize++;
     }
-    cmd->args[cmd->argSize] = NULL;
+
+	if(cmd->argSize == 0)
+	{
+    	cmd->args[cmd->argSize+1] = NULL;
+	}
 }

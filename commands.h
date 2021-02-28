@@ -23,5 +23,6 @@ typedef struct
 //command
 command *CreateStack();                 //Cria a pilha e a inicializa vazia
 int InsertArg(command *cmd, char *key); //Insere um caractere na pilha
+void AddComand(command *cmd, char *buffer);
 
 #endif

@@ -20,10 +20,11 @@ int main()
 	printf("> ");
     GetCommand(cmdline);
 
-    printf("%s\n", cmdline->current->args[0]);
-    printf("%c\n", cmdline->nextOperator);
-
-    printf("%s\n", cmdline->next->current->args[0]);
+    printf("%s - ", cmdline->current->args[0]);
+    printf("%s - ", cmdline->next->current->args[0]);
+	printf("%s - ", cmdline->next->next->current->args[0]);
+	printf("%s - ", cmdline->next->next->next->current->args[0]);
+	printf("%s\n", cmdline->next->next->next->next->current->args[0]);
 
     /* int fileDescriptors[2], bytes;
     command *cmd = CreateStack();

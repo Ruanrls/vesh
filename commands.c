@@ -20,3 +20,27 @@ command *CreateStack()
 
     return cmd;
 }
+
+void AddComand(command *cmd, char *buffer)
+{
+	if(cmd->argSize == ARG_MAX_QUANTITY - 1)
+	{
+		printf("Muitos argumentos passados!\n");
+		exit(0);
+	}
+
+	strcat(buffer, "\0");
+
+	cmd->argSize++;
+
+	if(strlen(buffer) == 0)
+	{
+		printf("Sem buffer\n");
+		exit(0);
+	}
+
+
+	strcpy(cmd->args[cmd->argSize - 1], buffer);
+
+	buffer[0] = '\0';
+}

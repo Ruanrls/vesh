@@ -17,7 +17,7 @@ typedef struct Commandline
 commandline *CreateLine();
 commandline *GetLastCommand(commandline *cmd);
 void GetCommand(commandline *root);     //Recebe o comando a ser utilizado
-void CreateCommand(commandline *cmd, char key);
+commandline *CreateCommandLine(commandline *cmd, char key);
 
 
 #endif
