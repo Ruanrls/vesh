@@ -1,9 +1,0 @@
-commands.c
-commands.h
-commands.o
-la
-LICENSE
-main
-main.c
-main.o
-makefile
